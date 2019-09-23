@@ -131,6 +131,13 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             V.add(netwkJs, threaded=True)
             ctr.js = netwkJs
 
+    if use_sensor_data or cfg.USER_SENSOR_DATA_AS_DEFAULT:
+
+        from my_controller import SensorDataController
+        sensorDataController = SensorDataController()
+        V.add(sensorDataController, inputs=['throttle', 'angle'], outputs=['m_throttle', 'm_angle'], threaded=True)
+        ctr = sensorDataController
+
     else:        
         #This web controller will create a web server that is capable
         #of managing steering, throttle, and modes, and more.
@@ -456,8 +463,8 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
                                         zero_pulse=cfg.THROTTLE_STOPPED_PWM, 
                                         min_pulse=cfg.THROTTLE_REVERSE_PWM)
 
-        V.add(steering, inputs=['angle'])
-        V.add(throttle, inputs=['throttle'])
+        V.add(steering, inputs=['m_angle'])
+        V.add(throttle, inputs=['m_throttle'])
     
 
     elif cfg.DRIVE_TRAIN_TYPE == "DC_STEER_THROTTLE":
@@ -506,11 +513,11 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     inputs=['cam/image_array',
             'user/angle', 'user/throttle', 
-            'user/mode']
+            'user/mode', 'm_throttle', 'm_angle']
 
     types=['image_array',
            'float', 'float',
-           'str']
+           'str', 'float', 'float']
 
     if cfg.TRAIN_BEHAVIORS:
         inputs += ['behavior/state', 'behavior/label', "behavior/one_hot_state_array"]
