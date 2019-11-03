@@ -514,6 +514,7 @@ def train(cfg, tub_names, model_name, transfer_model, model_type, continuous, au
         steps_per_epoch = 100
     
     val_steps = num_val // cfg.BATCH_SIZE
+    val_steps = 2
     print('steps_per_epoch', steps_per_epoch)
 
     cfg.model_type = model_type

@@ -135,7 +135,6 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
         from my_controller import SensorDataController
         sensorDataController = SensorDataController()
-        V.add(sensorDataController, inputs=['throttle', 'angle'], outputs=['m_throttle', 'm_angle'], threaded=True)
         ctr = sensorDataController
 
     else:        
