@@ -2,3 +2,4 @@
 __pycache__/
 data/tub*
 models/*.h5
+env/
