@@ -46,6 +46,13 @@ class SensorDataController(object):
                 self.angle = (2* (self.angle)) - 1
             else:
                 self.angle = 2 * (self.angle - .5)
-        except Exception as e:
+        # serial.SerialException is thrown when there is no data, so just keep trying to read it.
+        except TypeError as e:
+            self.ser.close()
+            print('Serial connection with main control system was disconnected, shutting the system down')
+            # TODO: Set the autonomous_system pin to LOW
+            exit(1)
+        except Exception as e1:
+            print(e1)
             pass
         return self.throttle, self.angle, 'user', 1
