@@ -1,1 +1,4 @@
 *.sw*
+__pycache__/
+data/tub*
+models/*.h5

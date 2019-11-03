@@ -1,4 +1,5 @@
 import time 
+import serial
 
 
 class SensorDataController(object):
@@ -7,11 +8,15 @@ class SensorDataController(object):
     '''
 
     def __init__(self):
-        self.usbPort = ''
+        self.usbPort = '/dev/ttyS0'
+        self.baud_rate = 9600
         self.running = True
         self.maxValue = 2**12 - 1
         self.throttle = 0
         self.angle = 0
+        self.out = (0, 0, 'user', 1)
+        self.img = None
+        self.ser = serial.Serial(self.usbPort, self.baud_rate)
 
     def shutdown(self):
         self.running = False
@@ -19,19 +24,28 @@ class SensorDataController(object):
 
     def update(self):
 
+        # This sleep is needed because donkeycar is donkey
+        time.sleep(2)
         while self.running:
-            self.out = self.run(self.throttle, self.angle)
-            self.throttle = 4095 / maxValue
+
+            self.out = self.run(self.img)
+            self.throttle = 4095 / self.maxValue
             self.angle = 1.2
 
-    def run_threaded(self, throttle, angle):
-        self.throttle = throttle
-        self.angle = angle
+    def run_threaded(self, img):
+        self.img = img
         return self.out
 
-    def run(self, throttle, angle):
-        return throttle, angle
-
-    def poll(self):
-        ret = (self.throttle, self.angle)
-        return ret
+    def run(self, img):
+        try:
+            msg = self.ser.readline().decode()
+            # print(msg)
+            self.throttle = float(msg.split('a:')[1]) / self.maxValue
+            self.angle = float(msg.split('s:')[1].split('b:')[0]) / self.maxValue
+            if self.angle < .5:
+                self.angle = (2* (self.angle)) - 1
+            else:
+                self.angle = 2 * (self.angle - .5)
+        except Exception as e:
+            pass
+        return self.throttle, self.angle, 'user', 1

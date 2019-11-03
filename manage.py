@@ -131,11 +131,10 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             V.add(netwkJs, threaded=True)
             ctr.js = netwkJs
 
-    if use_sensor_data or cfg.USER_SENSOR_DATA_AS_DEFAULT:
+    elif cfg.USER_SENSOR_DATA_AS_DEFAULT:
 
         from my_controller import SensorDataController
-        sensorDataController = SensorDataController()
-        ctr = sensorDataController
+        ctr = SensorDataController()
 
     else:        
         #This web controller will create a web server that is capable
@@ -282,8 +281,10 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     if "coral" in model_type:
         inf_input = 'cam/image_array'
+        print("Não adicionei o ImgPreProcess")
     else:
         inf_input = 'cam/normalized/cropped'
+        print("Adicionei o ImgPreProcess")
         V.add(ImgPreProcess(cfg),
             inputs=['cam/image_array'],
             outputs=[inf_input],
@@ -399,8 +400,9 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
             
             elif mode == 'local_angle':
                 return pilot_angle, user_throttle
-            
+
             else: 
+                print(user_angle, user_throttle, pilot_angle, pilot_throttle)
                 return pilot_angle, pilot_throttle * cfg.AI_THROTTLE_MULT
         
     V.add(DriveMode(), 
@@ -462,8 +464,8 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
                                         zero_pulse=cfg.THROTTLE_STOPPED_PWM, 
                                         min_pulse=cfg.THROTTLE_REVERSE_PWM)
 
-        V.add(steering, inputs=['m_angle'])
-        V.add(throttle, inputs=['m_throttle'])
+        V.add(steering, inputs=['angle'])
+        V.add(throttle, inputs=['throttle'])
     
 
     elif cfg.DRIVE_TRAIN_TYPE == "DC_STEER_THROTTLE":
@@ -512,11 +514,11 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     inputs=['cam/image_array',
             'user/angle', 'user/throttle', 
-            'user/mode', 'm_throttle', 'm_angle']
+            'user/mode']
 
     types=['image_array',
            'float', 'float',
-           'str', 'float', 'float']
+           'str']
 
     if cfg.TRAIN_BEHAVIORS:
         inputs += ['behavior/state', 'behavior/label', "behavior/one_hot_state_array"]
