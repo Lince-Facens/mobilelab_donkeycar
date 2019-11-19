@@ -1,6 +1,6 @@
 import time 
 import serial
-
+import re
 
 class SensorDataController(object):
     '''
@@ -17,6 +17,7 @@ class SensorDataController(object):
         self.out = (0, 0, 'user', 1)
         self.img = None
         self.ser = serial.Serial(self.usbPort, self.baud_rate)
+        self.dataRegex = r"(s|b|a):([0-9]{4})"
 
     def shutdown(self):
         self.running = False
@@ -40,13 +41,22 @@ class SensorDataController(object):
         try:
             if self.ser.is_waiting > 0:
                 msg = self.ser.readline().decode()
-                # print(msg)
-                self.throttle = float(msg.split('a:')[1]) / self.maxValue
-                self.angle = float(msg.split('s:')[1].split('b:')[0]) / self.maxValue
-                if self.angle < .5:
-                    self.angle = (2* (self.angle)) - 1
-                else:
-                    self.angle = 2 * (self.angle - .5)
+                matches = re.finditer(self.dataRegex, msg, re.MULTILINE)
+
+                for matchNum, match in enumerate(matches):
+                    
+                    valueType = match.group(1)
+                    value = float(match.group(2)) / self.maxValue
+
+                    if valueType == 'a':
+                        self.throttle = value
+                    else if valueType == 's':
+                        if value < .5:
+                            self.angle = (2 * value) - 1
+                        else:
+                            self.angle = 2 * (value - .5)
+                    #else if valueType == 'b':
+                
         # serial.SerialException is thrown when there is no data, so just keep trying to read it.
         except TypeError as e:
             self.ser.close()
