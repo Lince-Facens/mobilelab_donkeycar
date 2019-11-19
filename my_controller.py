@@ -17,7 +17,7 @@ class SensorDataController(object):
         self.out = (0, 0, 'user', 1)
         self.img = None
         self.ser = serial.Serial(self.usbPort, self.baud_rate)
-        self.dataRegex = r"(s|b|a):([0-9]{4})"
+        self.dataRegex = r"(s|b|a)([0-9]{4})"
 
     def shutdown(self):
         self.running = False
