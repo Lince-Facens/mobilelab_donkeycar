@@ -38,14 +38,15 @@ class SensorDataController(object):
 
     def run(self, img):
         try:
-            msg = self.ser.readline().decode()
-            # print(msg)
-            self.throttle = float(msg.split('a:')[1]) / self.maxValue
-            self.angle = float(msg.split('s:')[1].split('b:')[0]) / self.maxValue
-            if self.angle < .5:
-                self.angle = (2* (self.angle)) - 1
-            else:
-                self.angle = 2 * (self.angle - .5)
+            if self.ser.is_waiting > 0:
+                msg = self.ser.readline().decode()
+                # print(msg)
+                self.throttle = float(msg.split('a:')[1]) / self.maxValue
+                self.angle = float(msg.split('s:')[1].split('b:')[0]) / self.maxValue
+                if self.angle < .5:
+                    self.angle = (2* (self.angle)) - 1
+                else:
+                    self.angle = 2 * (self.angle - .5)
         # serial.SerialException is thrown when there is no data, so just keep trying to read it.
         except TypeError as e:
             self.ser.close()
