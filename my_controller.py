@@ -50,12 +50,12 @@ class SensorDataController(object):
 
                     if valueType == 'a':
                         self.throttle = value
-                    else if valueType == 's':
+                    elif valueType == 's':
                         if value < .5:
                             self.angle = (2 * value) - 1
                         else:
                             self.angle = 2 * (value - .5)
-                    #else if valueType == 'b':
+                    #elif valueType == 'b':
                 
         # serial.SerialException is thrown when there is no data, so just keep trying to read it.
         except TypeError as e:
