@@ -233,3 +233,4 @@ RESET_ORIGIN_BTN = "triangle"       # joystick button to press to move car back 
 
 #Mobile lab user define
 USER_SENSOR_DATA_AS_DEFAULT = True
+MOBILELAB_SERIAL_PORT = 'ttyTHS2'
