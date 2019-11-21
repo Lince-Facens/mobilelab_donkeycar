@@ -1,6 +1,7 @@
 import time 
 import serial
 import re
+import config
 
 class SensorDataController(object):
     '''
@@ -8,7 +9,7 @@ class SensorDataController(object):
     '''
 
     def __init__(self):
-        self.usbPort = '/dev/ttyS0'
+        self.usbPort = config.MOBILELAB_SERIAL_PORT
         self.baud_rate = 9600
         self.running = True
         self.maxValue = 2**12 - 1
@@ -39,7 +40,7 @@ class SensorDataController(object):
 
     def run(self, img):
         try:
-            if self.ser.is_waiting > 0:
+            if self.ser.in_waiting > 0:
                 msg = self.ser.readline().decode()
                 matches = re.finditer(self.dataRegex, msg, re.MULTILINE)
 
