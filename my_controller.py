@@ -39,7 +39,7 @@ class SensorDataController(object):
 
     def run(self, img):
         try:
-            if self.ser.is_waiting > 0:
+            if self.ser.in_waiting > 0:
                 msg = self.ser.readline().decode()
                 matches = re.finditer(self.dataRegex, msg, re.MULTILINE)
 
