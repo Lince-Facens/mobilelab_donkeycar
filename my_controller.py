@@ -31,8 +31,8 @@ class SensorDataController(object):
         while self.running:
 
             self.out = self.run(self.img)
-            self.throttle = 4095 / self.maxValue
-            self.angle = 1.2
+            #self.throttle = 4095 / self.maxValue
+            #self.angle = 1.2
 
     def run_threaded(self, img):
         self.img = img
