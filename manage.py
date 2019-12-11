@@ -134,7 +134,7 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
     elif cfg.USER_SENSOR_DATA_AS_DEFAULT:
 
         from my_controller import SensorDataController
-        ctr = SensorDataController()
+        ctr = SensorDataController(model_path)
 
     else:        
         #This web controller will create a web server that is capable

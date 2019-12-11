@@ -8,7 +8,7 @@ class SensorDataController(object):
     Use the serial interface to receive sensor data from the control system
     '''
 
-    def __init__(self):
+    def __init__(self, autonomous_mode):
         self.usbPort = config.MOBILELAB_SERIAL_PORT
         self.baud_rate = 9600
         self.running = True
@@ -20,6 +20,10 @@ class SensorDataController(object):
         self.img = None
         self.ser = serial.Serial(self.usbPort, self.baud_rate)
         self.dataRegex = r"(s|r|a)([0-9]{4})"
+        if autonomous_mode is None:
+            self.autonomous_mode = 'user'
+        else:
+            self.autonomous_mode = 'ai_mode'
 
     def shutdown(self):
         self.running = False
@@ -71,6 +75,6 @@ class SensorDataController(object):
             print(e1)
             pass
         if self.reverse_throttle > self.throttle:
-            return self.angle, -self.reverse_throttle, 'user', 1
+            return self.angle, -self.reverse_throttle, self.autonomous_mode, self.autonomous_mode == 'user'
         else: 
-            return self.angle, self.throttle, 'user', 1
+            return self.angle, self.throttle, self.autonomous_mode, self.autonomous_mode == 'user
