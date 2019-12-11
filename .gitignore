@@ -1,5 +1,5 @@
 *.sw*
 __pycache__/
-data/tub*
+data
 models/*.h5
 env/

@@ -420,7 +420,31 @@ def drive(cfg, model_path=None, use_joystick=False, model_type=None, camera_type
 
     if isinstance(ctr, JoystickController):
         ctr.set_button_down_trigger(cfg.AI_LAUNCH_ENABLE_BUTTON, aiLauncher.enable_ai_launch)
+    
+    # Whether the "autonomous" pin is enabled
+    if cfg.MOBILELAB_AUTONOMOUS_PIN:
 
+        from Adafruit_GPIO import GPIO
+
+        class AutonomousPinManager:
+            '''
+            Sends a GPIO output whether the vehicle is autonomous,
+            allowing hardware to react accordinly
+            '''
+
+            def __init__(self, pin):
+                self.pin = pin
+                self.gpio = GPIO.get_platform_gpio()
+                self.gpio.setup(self.pin, GPIO.OUT)
+
+            def run(self, ai_running):
+                self.gpio.output(self.pin, ai_running)
+
+            def shutdown(self):
+                self.gpio.output(self.pin, False)
+                self.gpio.cleanup(self.pin)
+
+        V.add(AutonomousPinManager(cfg.MOBILELAB_AUTONOMOUS_PIN), inputs=['ai_running'])
 
     class AiRunCondition:
         '''

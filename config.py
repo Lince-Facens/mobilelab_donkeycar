@@ -53,7 +53,7 @@ STEERING_RIGHT_PWM = 4095        #pwm value for full right steering
 THROTTLE_CHANNEL = 1            #channel on the 9685 pwm board 0-15
 THROTTLE_FORWARD_PWM = 4095      #pwm value for max forward throttle
 THROTTLE_STOPPED_PWM = 0      #pwm value for no movement
-THROTTLE_REVERSE_PWM = -100      #pwm value for max reverse throttle
+THROTTLE_REVERSE_PWM = -4095      #pwm value for max reverse throttle
 
 #DC_STEER_THROTTLE with one motor as steering, one as drive
 #these GPIO pinouts are only used for the DRIVE_TRAIN_TYPE=DC_STEER_THROTTLE
@@ -234,3 +234,4 @@ RESET_ORIGIN_BTN = "triangle"       # joystick button to press to move car back 
 #Mobile lab user define
 USER_SENSOR_DATA_AS_DEFAULT = True
 MOBILELAB_SERIAL_PORT = '/dev/ttyTHS2'
+MOBILELAB_AUTONOMOUS_PIN = 12    # the "is autonomous" pin or falsy to disable it
