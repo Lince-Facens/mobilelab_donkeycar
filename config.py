@@ -234,4 +234,4 @@ RESET_ORIGIN_BTN = "triangle"       # joystick button to press to move car back 
 #Mobile lab user define
 USER_SENSOR_DATA_AS_DEFAULT = True
 MOBILELAB_SERIAL_PORT = '/dev/ttyTHS2'
-MOBILELAB_AUTONOMOUS_PIN = False    # the "is autonomous" pin or falsy to disable it
+MOBILELAB_AUTONOMOUS_PIN = 12    # the "is autonomous" pin or falsy to disable it
