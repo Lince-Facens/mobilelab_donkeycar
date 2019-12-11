@@ -2,7 +2,7 @@ import time
 import serial
 import re
 import config
-import decimal
+from decimal import Decimal
 
 class SensorDataController(object):
     '''
@@ -38,8 +38,6 @@ class SensorDataController(object):
         while self.running:
 
             self.out = self.run(self.img)
-            #self.throttle = 4095 / self.maxValue
-            #self.angle = 1.2
 
     def run_threaded(self, img):
         self.img = img
@@ -54,7 +52,7 @@ class SensorDataController(object):
                 for matchNum, match in enumerate(matches):
                     
                     valueType = match.group(1)
-                    value = round(Decimal(float(match.group(2)) / self.maxValue), self.n_trunc)
+                    value = float(round(Decimal(float(match.group(2)) / self.maxValue), self.n_trunc))
 
                     if valueType == 'a':
                         self.throttle = value
