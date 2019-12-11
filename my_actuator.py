@@ -1,3 +1,6 @@
+import time
+import donkeycar as dk
+
 class PWMThrottle:
     """ 
     Wrapper over a PWM motor cotnroller to convert -1 to 1 throttle
