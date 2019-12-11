@@ -67,4 +67,4 @@ class SensorDataController(object):
         except Exception as e1:
             print(e1)
             pass
-        return self.throttle, self.angle, 'user', 1
+        return self.angle, self.throttle, 'user', 1
