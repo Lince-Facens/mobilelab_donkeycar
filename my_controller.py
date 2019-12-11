@@ -77,4 +77,4 @@ class SensorDataController(object):
         if self.reverse_throttle > self.throttle:
             return self.angle, -self.reverse_throttle, self.autonomous_mode, self.autonomous_mode == 'user'
         else: 
-            return self.angle, self.throttle, self.autonomous_mode, self.autonomous_mode == 'user
+            return self.angle, self.throttle, self.autonomous_mode, self.autonomous_mode == 'user'
