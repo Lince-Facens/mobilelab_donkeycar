@@ -34,5 +34,5 @@ class PWMThrottle:
         self.controller.set_pulse(pulse)
     
     def shutdown(self):
-        self.run(0) #stop vehicle
+        self.run(self.min_pulse) #stop vehicle
 
