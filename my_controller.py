@@ -2,6 +2,7 @@ import time
 import serial
 import re
 import config
+import decimal
 
 class SensorDataController(object):
     '''
@@ -20,6 +21,7 @@ class SensorDataController(object):
         self.img = None
         self.ser = serial.Serial(self.usbPort, self.baud_rate)
         self.dataRegex = r"(s|r|a)([0-9]{4})"
+        self.n_trunc = 3
         if autonomous_mode is None:
             self.autonomous_mode = 'user'
         else:
@@ -52,7 +54,7 @@ class SensorDataController(object):
                 for matchNum, match in enumerate(matches):
                     
                     valueType = match.group(1)
-                    value = float(match.group(2)) / self.maxValue
+                    value = round(Decimal(float(match.group(2)) / self.maxValue), self.n_trunc)
 
                     if valueType == 'a':
                         self.throttle = value
@@ -63,7 +65,6 @@ class SensorDataController(object):
                             self.angle = (2 * value) - 1
                         else:
                             self.angle = 2 * (value - .5)
-                    #elif valueType == 'b':
                 
         # serial.SerialException is thrown when there is no data, so just keep trying to read it.
         except TypeError as e:
