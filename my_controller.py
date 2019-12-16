@@ -57,7 +57,7 @@ class SensorDataController(object):
                     if valueType == 'a':
                         self.throttle = value
                     elif valueType == 'r':
-                        self.reverse_throttle = value
+                        self.throttle = -value
                     elif valueType == 's':
                         if value < .5:
                             self.angle = (2 * value) - 1
@@ -73,7 +73,5 @@ class SensorDataController(object):
         except Exception as e1:
             print(e1)
             pass
-        if self.reverse_throttle > self.throttle:
-            return self.angle, -self.reverse_throttle, self.autonomous_mode, self.autonomous_mode == 'user'
-        else: 
-            return self.angle, self.throttle, self.autonomous_mode, self.autonomous_mode == 'user'
+            
+        return self.angle, self.throttle, self.autonomous_mode, self.autonomous_mode == 'user'
